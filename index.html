@@ -499,7 +499,39 @@
     color: var(--white); font-size: 1rem; font-weight: 700;
   }
 
-  /* ANIMATIONS */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--navy); border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 600px) {
+    .hamburger { display: flex; }
+    .nav-links {
+      display: none; flex-direction: column; gap: 0;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--light-line);
+      padding: 0.5rem 0 1rem;
+      box-shadow: 0 8px 24px rgba(10,22,40,0.08);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { width: 100%; }
+    .nav-links a {
+      display: block; padding: 0.75rem 1.5rem;
+      font-size: 0.9rem; letter-spacing: 0.05em;
+    }
+    .nav-links a:hover { background: var(--ice); }
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(22px); }
     to { opacity: 1; transform: translateY(0); }
@@ -509,17 +541,78 @@
     to { opacity: 1; }
   }
 
-  /* RESPONSIVE */
+  /* RESPONSIVE — LAPTOP (max 1200px) */
+  @media (max-width: 1200px) {
+    .hero { padding: 7rem 3rem 4rem; gap: 2rem; }
+    section { padding: 5rem 3rem; }
+    footer { padding: 2rem 3rem; }
+    nav { padding: 1rem 2rem; }
+  }
+
+  /* RESPONSIVE — TABLET (max 900px) */
   @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding: 6rem 2rem 3rem; text-align: center; }
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 6rem 2rem 3rem;
+      text-align: center;
+    }
     .hero-desc { margin: 0 auto 2rem; }
     .hero-ctas { justify-content: center; }
-    .hero-visual { margin-top: 2.5rem; }
+    .hero-visual { margin-top: 2rem; }
+    .hero-card { width: 100%; max-width: 360px; }
     section { padding: 4rem 2rem; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
     .edu-grid, .certs-grid, .contact-wrap { grid-template-columns: 1fr; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem 2rem; }
     nav { padding: 1rem 1.5rem; }
     .nav-links { gap: 1.2rem; }
+  }
+
+  /* RESPONSIVE — MOBILE (max 600px) */
+  @media (max-width: 600px) {
+    .hero { padding: 5.5rem 1.2rem 2.5rem; }
+    .hero-name { font-size: 2.4rem; }
+    .hero-title { font-size: 0.95rem; }
+    .hero-desc { font-size: 0.93rem; }
+    .hero-card { width: 100%; padding: 1.5rem 1.2rem; border-radius: 18px; }
+    .hcard-avatar, #profile-photo {
+      width: 150px !important; height: 150px !important;
+    }
+    .hcard-stats { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .hstat-val { font-size: 1.1rem; }
+
+    nav { padding: 0.8rem 1rem; }
+    .nav-logo { font-size: 1rem; }
+    .nav-links { gap: 0.7rem; }
+    .nav-links a { font-size: 0.72rem; }
+
+    section { padding: 3rem 1.2rem; }
+    .section-title { font-size: 1.6rem; }
+    .section-desc { font-size: 0.9rem; }
+
+    .skills-grid { grid-template-columns: 1fr; }
+    .skill-card { padding: 1rem 1.2rem; }
+
+    .timeline::before { left: 13px; }
+    .tl-dot { width: 28px; height: 28px; }
+    .timeline-item { grid-template-columns: 38px 1fr; gap: 0.8rem; }
+    .tl-body { padding: 1.2rem 1.1rem; border-radius: 12px; }
+    .tl-role { font-size: 1rem; }
+    .tl-list li { font-size: 0.85rem; }
+
+    .edu-card { padding: 1.4rem 1.2rem; }
+    .edu-degree { font-size: 0.95rem; }
+
+    .certs-grid { grid-template-columns: 1fr; }
+    .cert-card { padding: 1.4rem 1.2rem; }
+    .cert-name { font-size: 0.95rem; }
+
+    .ci-item { gap: 0.7rem; }
+    .ci-val { font-size: 0.85rem; }
+
+    footer { padding: 1.2rem 1rem; font-size: 0.75rem; }
+
+    .btn-primary, .btn-outline { padding: 0.7rem 1.3rem; font-size: 0.85rem; }
   }
 </style>
 </head>
@@ -528,13 +621,16 @@
 <!-- NAV -->
 <nav id="navbar">
   <div class="nav-logo">K. Ilarde</div>
-  <ul class="nav-links">
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#education">Education</a></li>
-    <li><a href="#certifications">Certs</a></li>
-    <li><a href="#contact">Contact</a></li>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+    <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
+    <li><a href="#education" onclick="closeMenu()">Education</a></li>
+    <li><a href="#certifications" onclick="closeMenu()">Certs</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -853,6 +949,16 @@
       placeholder.style.display = 'none';
     };
     reader.readAsDataURL(file);
+  }
+
+  // Hamburger menu
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('nav-links').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
   }
 
   // Navbar scroll effect
